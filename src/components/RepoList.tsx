@@ -2,10 +2,26 @@
 
 import React from 'react'
 import RepoCard from './RepoCard'
-import { Repository } from '@/lib/data'
+
+interface GitHubRepository {
+  id: number
+  name: string
+  full_name: string
+  description: string
+  html_url: string
+  owner: {
+    login: string
+    avatar_url: string
+  }
+  stargazers_count: number
+  forks_count: number
+  language: string | null
+  updated_at: string
+  topics: string[]
+}
 
 interface RepoListProps {
-  repos: Repository[]
+  repos: GitHubRepository[]
 }
 
 export default function RepoList({ repos }: RepoListProps) {
