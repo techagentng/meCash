@@ -16,18 +16,6 @@ export default function RightSidebar() {
         </p>
         <button className="text-[#58a6ff] text-sm hover:underline">Explore sponsorable projects →</button>
       </div>
-
-      <div className="bg-[#0d1117] border border-[#30363d] rounded-md p-4">
-        <h3 className="font-semibold mb-2">How can we improve search?</h3>
-        <button className="text-[#58a6ff] text-sm hover:underline">Give feedback</button>
-        <div className="mt-4 p-3 bg-[#21262d] rounded-md">
-          <div className="flex items-center space-x-2 text-sm">
-            <span className="text-yellow-400">💡</span>
-            <span className="text-gray-300">ProTip!</span>
-          </div>
-          <p className="text-xs text-gray-400 mt-1">Press the <kbd className="bg-[#30363d] px-1 rounded">?</kbd> key to activate the search input again and adjust your query.</p>
-        </div>
-      </div>
     </aside>
   )
 }

@@ -64,17 +64,17 @@ export const repositories: Repository[] = [
 ]
 
 export const filterCategories = [
-  { name: 'Code', iconName: 'Code', count: '15.1M', active: false },
-  { name: 'Repositories', iconName: 'BookOpen', count: '3.6k', active: true },
-  { name: 'Issues', iconName: 'AlertCircle', count: '442', active: false },
-  { name: 'Pull requests', iconName: 'GitPullRequest', count: '571', active: false },
-  { name: 'Discussions', iconName: 'MessageSquare', count: '30', active: false },
+  { name: 'Code', iconName: 'Code', count: '2k', active: false },
+  { name: 'Repositories', iconName: 'BookOpen', count: '2k', active: true },
+  { name: 'Issues', iconName: 'AlertCircle', count: '2k', active: false },
+  { name: 'Pull requests', iconName: 'GitPullRequest', count: '2k', active: false },
+  { name: 'Discussions', iconName: 'MessageSquare', count: '2k', active: false },
   { name: 'Users', iconName: 'Users', count: '2k', active: false },
-  { name: 'Commits', iconName: 'GitCommit', count: '220k', active: false },
-  { name: 'Packages', iconName: 'Package', count: '10', active: false },
-  { name: 'Wikis', iconName: 'FileText', count: '810k', active: false },
-  { name: 'Topics', iconName: 'Tag', count: '15', active: false },
-  { name: 'Marketplace', iconName: 'ShoppingCart', count: '0', active: false },
+  { name: 'Commits', iconName: 'GitCommit', count: '2k', active: false },
+  { name: 'Packages', iconName: 'Package', count: '2k', active: false },
+  { name: 'Wikis', iconName: 'FileText', count: '2k', active: false },
+  { name: 'Topics', iconName: 'Tag', count: '2k', active: false },
+  { name: 'Marketplace', iconName: 'ShoppingCart', count: '2k', active: false },
 ]
 
 export const languages = [

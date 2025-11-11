@@ -15,7 +15,8 @@ export default function TopNav({ searchQuery, setSearchQuery }: TopNavProps) {
 
   const handleSearch = (q: string) => {
     setSearchQuery(q)
-    router.push(`/?q=${encodeURIComponent(q)}`)
+    // Navigate to the results page instead of the root so typing/search stays on results
+    router.push(`/results?q=${encodeURIComponent(q)}`)
   }
 
   return (

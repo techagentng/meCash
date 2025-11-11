@@ -33,18 +33,7 @@ export default function LeftSidebar() {
         </div>
       </div>
 
-      <div>
-        <h3 className="text-sm font-semibold text-gray-300 mb-3">Languages</h3>
-        <div className="space-y-2">
-          {languages.map((lang) => (
-            <div key={lang.name} className="flex items-center space-x-3 text-sm text-gray-400 hover:text-white cursor-pointer">
-              <div className={`w-3 h-3 rounded-full ${lang.color}`}></div>
-              <span className="flex-1">{lang.name}</span>
-              <span className="text-xs">{lang.count}</span>
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Languages list removed as requested */}
     </aside>
   )
 }
