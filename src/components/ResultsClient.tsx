@@ -34,7 +34,6 @@ export default function ResultsClient({ initialQuery = '' }: ResultsClientProps)
   const qFromParams = searchParams?.get('q') || ''
 
   useEffect(() => {
-    // Prefer client-side URL param when available so SPA navigation updates results immediately
     const q = qFromParams || initialQuery
     setSearchQuery(q)
     setCurrentPage(1)
