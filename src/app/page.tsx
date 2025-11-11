@@ -1,118 +1,53 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { useSearchParams } from 'next/navigation'
-import Pagination from '@/components/Pagination'
-import TopNav from '@/components/TopNav'
-import LeftSidebar from '@/components/LeftSidebar'
-import RightSidebar from '@/components/RightSidebar'
-import RepoList from '@/components/RepoList'
-import { useSearchRepositories } from '@/hooks/useSearchRepositories'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
-const sortMap: Record<string, 'stars' | 'forks' | 'updated'> = {
-  'Best match': 'stars',
-  'Most stars': 'stars',
-  'Recently updated': 'updated',
-  'Most forks': 'forks',
-}
+export default function SearchPage() {
+  const router = useRouter()
+  const [searchInput, setSearchInput] = useState('')
 
-export default function GitHubSearchInterface() {
-  const searchParams = useSearchParams()
-  const queryParam = searchParams.get('q') || ''
-
-  const [searchQuery, setSearchQuery] = useState(queryParam)
-  const [sortBy, setSortBy] = useState('Best match')
-  const [currentPage, setCurrentPage] = useState(1)
-  const perPage = 10
-
-  useEffect(() => {
-    setSearchQuery(queryParam)
-    setCurrentPage(1)
-  }, [queryParam])
-
-  // Fetch real data from GitHub API
-  const { data, isLoading, error } = useSearchRepositories({
-    query: searchQuery,
-    sortBy: sortMap[sortBy] || 'stars',
-    page: currentPage,
-    perPage,
-  })
-
-  const repos = data?.items || []
-  const totalCount = data?.total_count || 0
-  const totalPages = Math.max(1, Math.ceil(totalCount / perPage))
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (searchInput.trim()) {
+      router.push(`/results?q=${encodeURIComponent(searchInput)}`)
+    }
+  }
 
   return (
-    <div className="min-h-screen bg-[#0d1117] text-white">
-      <TopNav searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+    <div className="min-h-screen w-full bg-[#010409] text-white flex flex-col items-center justify-start pt-24 relative overflow-hidden">
 
-      <div className="max-w-screen-2xl mx-auto flex">
-        <LeftSidebar />
+      <h1 className="text-5xl font-black tracking-tight mb-10">GitHub</h1>
 
-        <main className="flex-1 p-4">
-          <div className="flex items-center justify-between mb-6">
-            {isLoading ? (
-              <div className="text-gray-400 text-sm">Loading results...</div>
-            ) : error ? (
-              <div className="text-red-500 text-sm">Error fetching results</div>
-            ) : (
-              <h2 className="text-xl font-semibold">
-                {totalCount.toLocaleString()} results{' '}
-                <span className="text-gray-400 text-sm font-normal">(~{Math.random() * 500 | 0}ms)</span>
-              </h2>
-            )}
-
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-400">Sort by:</span>
-                <select
-                  value={sortBy}
-                  onChange={(e) => {
-                    setSortBy(e.target.value)
-                    setCurrentPage(1)
-                  }}
-                  className="bg-[#21262d] border border-[#30363d] rounded-md px-3 py-1 text-sm focus:outline-none focus:border-[#58a6ff]"
-                >
-                  <option>Best match</option>
-                  <option>Most stars</option>
-                  <option>Recently updated</option>
-                  <option>Most forks</option>
-                </select>
-              </div>
-              <button className="flex items-center space-x-2 bg-[#21262d] border border-[#30363d] rounded-md px-3 py-1 text-sm hover:bg-[#30363d]">
-                <span>Save</span>
-              </button>
-            </div>
+      <div className="w-full max-w-2xl px-6">
+        <form onSubmit={handleSearch}>
+          <div className="relative group">
+            <input
+              type="text"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              placeholder="Search GitHub"
+              className="w-full bg-transparent border border-[#4b5563] rounded-lg px-12 py-3 text-lg focus:outline-none focus:border-blue-400 transition"
+            />
+            <svg
+              className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-blue-400"
+              fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35m1.1-5.4A7.75 7.75 0 1110.75 3a7.75 7.75 0 017.75 7.75z"/>
+            </svg>
           </div>
+        </form>
 
-          <div>
-            {isLoading ? (
-              <div className="space-y-4">
-                {[...Array(perPage)].map((_, i) => (
-                  <div key={i} className="h-24 bg-[#161b22] rounded-md animate-pulse"></div>
-                ))}
-              </div>
-            ) : error ? (
-              <div className="p-4 bg-red-900/20 border border-red-700 rounded-md text-red-400">
-                Failed to fetch repositories. Please try again.
-              </div>
-            ) : repos.length === 0 ? (
-              <div className="p-4 text-gray-400">No repositories found for "{searchQuery}"</div>
-            ) : (
-              <>
-                <RepoList repos={repos} />
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={(p) => setCurrentPage(p)}
-                />
-              </>
-            )}
-          </div>
-        </main>
-
-        <RightSidebar />
+        <p className="text-gray-400 text-sm mt-3 text-center">
+          Tip: For an <span className="text-blue-400 cursor-pointer hover:underline">advanced search</span>, use our <span className="text-blue-400 cursor-pointer hover:underline">prefixes</span>.
+        </p>
       </div>
+
+      <img
+        src="/home-mobile-dark.png"
+        alt="GitHub Art"
+        className="w-[550px] mt-20 pointer-events-none select-none opacity-95"
+      />
     </div>
   )
 }

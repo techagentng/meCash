@@ -16,14 +16,17 @@ const sortMap: Record<string, 'stars' | 'forks' | 'updated'> = {
   'Most forks': 'forks',
 }
 
-export default function SearchPage() {
+export default function GitHubSearchInterface() {
   const searchParams = useSearchParams()
   const queryParam = searchParams.get('q') || ''
 
   const [searchQuery, setSearchQuery] = useState(queryParam)
   const [sortBy, setSortBy] = useState('Best match')
   const [currentPage, setCurrentPage] = useState(1)
-  const [language, setLanguage] = useState('TypeScript')
+  const [language, setLanguage] = useState('')
+  const [stars, setStars] = useState('')
+  const [license, setLicense] = useState('')
+  const [order, setOrder] = useState<'asc' | 'desc'>('desc')
   const perPage = 10
 
   useEffect(() => {
@@ -38,6 +41,9 @@ export default function SearchPage() {
     page: currentPage,
     perPage,
     language,
+    stars: stars || null,
+    license: license || null,
+    order,
   })
 
   const repos = data?.items || []
@@ -48,25 +54,16 @@ export default function SearchPage() {
     <div className="min-h-screen bg-[#0d1117] text-white">
       <TopNav searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
-      <div className="max-w-screen-2xl mx-auto flex">
-        <LeftSidebar />
+      <div className="max-w-screen-2xl mx-auto flex flex-col md:flex-row">
+        <div className="hidden md:block">
+          <LeftSidebar />
+        </div>
 
         <main className="flex-1 p-4">
           <div className="flex items-center justify-between mb-6">
-            {isLoading ? (
-              <div className="text-gray-400 text-sm">Loading results...</div>
-            ) : error ? (
-              <div className="text-red-500 text-sm">Error fetching results</div>
-            ) : (
-              <h2 className="text-xl font-semibold">
-                {totalCount.toLocaleString()} results{' '}
-                <span className="text-gray-400 text-sm font-normal">(~{Math.random() * 500 | 0}ms)</span>
-              </h2>
-            )}
-
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-400">Sort by:</span>
+            <div className="flex flex-wrap items-center gap-2 md:space-x-4">
+              <div className="flex items-center space-x-2 w-full sm:w-auto">
+                <span className="text-sm text-gray-400">Sort:</span>
                 <select
                   value={sortBy}
                   onChange={(e) => {
@@ -81,7 +78,7 @@ export default function SearchPage() {
                   <option>Most forks</option>
                 </select>
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 w-full sm:w-auto">
                 <span className="text-sm text-gray-400">Language:</span>
                 <select
                   value={language}
@@ -99,12 +96,66 @@ export default function SearchPage() {
                   <option value="Go">Go</option>
                 </select>
               </div>
-              <button className="flex items-center space-x-2 bg-[#21262d] border border-[#30363d] rounded-md px-3 py-1 text-sm hover:bg-[#30363d]">
-                <span>Save</span>
-              </button>
+              <div className="flex items-center space-x-2 w-full sm:w-auto">
+                <span className="text-sm text-gray-400">Stars:</span>
+                <input
+                  type="text"
+                  value={stars}
+                  onChange={(e) => {
+                    setStars(e.target.value)
+                    setCurrentPage(1)
+                  }}
+                  placeholder=">1000 or 10..100"
+                  className="w-full sm:w-28 bg-[#0d1117] border border-[#30363d] rounded-md px-2 py-1 text-sm focus:outline-none focus:border-[#58a6ff]"
+                />
+              </div>
+              <div className="flex items-center space-x-2 w-full sm:w-auto">
+                <span className="text-sm text-gray-400">License:</span>
+                <select
+                  value={license}
+                  onChange={(e) => {
+                    setLicense(e.target.value)
+                    setCurrentPage(1)
+                  }}
+                  className="bg-[#21262d] border border-[#30363d] rounded-md px-3 py-1 text-sm focus:outline-none focus:border-[#58a6ff]"
+                >
+                  <option value="">Any</option>
+                  <option value="mit">MIT</option>
+                  <option value="apache-2.0">Apache-2.0</option>
+                  <option value="gpl-3.0">GPL-3.0</option>
+                </select>
+              </div>
+              <div className="flex items-center space-x-2 w-full sm:w-auto">
+                <span className="text-sm text-gray-400">Order:</span>
+                <select
+                  value={order}
+                  onChange={(e) => {
+                    setOrder(e.target.value as 'asc' | 'desc')
+                    setCurrentPage(1)
+                  }}
+                  className="bg-[#21262d] border border-[#30363d] rounded-md px-3 py-1 text-sm focus:outline-none focus:border-[#58a6ff]"
+                >
+                  <option value="desc">Desc</option>
+                  <option value="asc">Asc</option>
+                </select>
+              </div>
+              <div className="flex items-center space-x-2">
+                <button className="flex items-center space-x-2 bg-[#21262d] border border-[#30363d] rounded-md px-3 py-1 text-sm hover:bg-[#30363d]">
+                  <span>Save</span>
+                </button>
+              </div>
             </div>
           </div>
-
+            {isLoading ? (
+              <div className="text-gray-400 text-sm">Loading results...</div>
+            ) : error ? (
+              <div className="text-red-500 text-sm">Error fetching results</div>
+            ) : (
+              <h2 className="text-xl font-semibold">
+                {totalCount.toLocaleString()} results
+                <span className="text-gray-400 text-sm font-normal">(~{Math.random() * 500 | 0}ms)</span>
+              </h2>
+            )}
           <div>
             {isLoading ? (
               <div className="space-y-4">

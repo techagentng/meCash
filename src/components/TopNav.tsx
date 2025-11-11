@@ -2,6 +2,8 @@
 
 import React from 'react'
 import { Search, Bell, Plus, Menu } from 'lucide-react'
+import SearchBar from './SearchBar'
+import { useRouter } from 'next/navigation'
 
 interface TopNavProps {
   searchQuery: string
@@ -9,6 +11,13 @@ interface TopNavProps {
 }
 
 export default function TopNav({ searchQuery, setSearchQuery }: TopNavProps) {
+  const router = useRouter()
+
+  const handleSearch = (q: string) => {
+    setSearchQuery(q)
+    router.push(`/?q=${encodeURIComponent(q)}`)
+  }
+
   return (
     <header className="bg-[#21262d] border-b border-[#30363d] px-4 py-3">
       <div className="flex items-center justify-between max-w-screen-2xl mx-auto">
@@ -25,13 +34,7 @@ export default function TopNav({ searchQuery, setSearchQuery }: TopNavProps) {
         <div className="flex-1 max-w-md mx-4">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#0d1117] border border-[#30363d] rounded-md pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-[#58a6ff] focus:ring-1 focus:ring-[#58a6ff]"
-              placeholder="Search GitHub"
-            />
+            <SearchBar initialValue={searchQuery} onSearch={handleSearch} />
           </div>
         </div>
 
